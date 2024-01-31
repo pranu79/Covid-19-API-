@@ -14,7 +14,7 @@
 
     <link rel="stylesheet" href="style.css">
     <script  src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-    <script src="script.js"></script>
+    
 </head>
 
 <body>
@@ -25,7 +25,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-</body>
+
 <div class="container-fluid p-4 " ng-app="myApp" ng-controller="myCtrl">
     <div class="container">
         <h3 class="text-center mb-3">{{title}}</h3>
@@ -107,4 +107,43 @@
     </div>
 </div>
 
+    <script>
+        let app = angular.module("myApp", []);
+
+app.controller("myCtrl", ($scope, $http) => {
+    $scope.title = "Stay Safe Stay Home";
+
+    const URI = 'https://covid-19.dataflowkit.com/v1'; //covid-19 api
+
+    $http.get(`${URI}/world`).then(
+        (response) => {
+            console.log(response.data);
+            $scope.alldata = response.data;
+        },
+        (error) => {
+            console.log(error);
+        })
+
+    $scope.get_c_data = () => {
+        let country = $scope.c;
+        if (country == '') {
+            $scope.c_data = undefined;
+            return;
+        }
+        
+        $http.get(`${URI}/${country}`).then(
+            (response) => {
+                console.log(response.data);
+                $scope.c_data = response.data;
+            }, (error) => {
+                console.log(error);
+            })
+
+
+    }
+
+
+})
+    </script>
+</body>
 </html>
